@@ -1,0 +1,37 @@
+#include <RH_ASK.h>
+
+const int BIT_RATE = 2000;
+
+const int RX_PIN = 14;
+
+RH_ASK driver(BIT_RATE, RX_PIN);
+
+void setup() {
+  Serial.begin(9600);
+pinMode(2, OUTPUT);
+pinMode(12, OUTPUT);
+
+  driver.init();
+}
+
+void loop() {
+  uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
+  uint8_t buflen = sizeof(buf);
+
+  if (driver.recv(buf, &buflen)) {
+ digitalWrite(2,LOW);
+ digitalWrite(12,HIGH);
+
+
+    for (int i = 0; i < buflen; i++)
+      Serial.print((char) buf[i]);
+
+    Serial.println("");
+    delay(1000);
+    digitalWrite(2,HIGH);
+    digitalWrite(12,LOW);
+
+
+  }
+
+}
