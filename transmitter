@@ -1,0 +1,42 @@
+#include <RH_ASK.h>
+  
+const int BIT_RATE = 2000;
+int a, b, c, d;
+const int RX_PIN = 0, TX_PIN = 14;
+  
+RH_ASK driver(BIT_RATE, RX_PIN, TX_PIN);
+  
+void setup() {
+  driver.init();
+  Serial.begin(9600);
+  pinMode(0, INPUT_PULLUP);
+  pinMode(2, INPUT_PULLUP);
+  pinMode(13, INPUT_PULLUP);
+}
+  
+void loop() {
+a=digitalRead(0);
+b=digitalRead(2);
+c=digitalRead(13);
+  char ra[] = "ROOM 2A";
+  char rb[] = "ROOM 2B";
+  char rc[] = "ROOM 2C";
+
+  if(a==0){
+      driver.send((uint8_t *) ra, strlen(ra));
+      driver.waitPacketSent();
+      Serial.println(ra);
+  }
+  if(b==0){
+      driver.send((uint8_t *) rb, strlen(rb));
+      driver.waitPacketSent();
+      Serial.println(rb);
+  }
+  if(c==0){
+      driver.send((uint8_t *) rc, strlen(rc));
+      driver.waitPacketSent();
+      Serial.println(rc);
+  }
+  
+  delay(500);
+}
